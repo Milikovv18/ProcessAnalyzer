@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/Libs">
+        <file>Resources/Lib_OK.png</file>
+        <file>Resources/Lib_NotFound.png</file>
+        <file>Resources/Lib_NoExport.png</file>
+        <file>Resources/Lib_Virtual.png</file>
+    </qresource>
+    <qresource prefix="/Buttons">
+        <file>Resources/Refresh.png</file>
+        <file>Resources/Search.png</file>
+    </qresource>
+    <qresource prefix="/Misc">
+        <file>Resources/question.png</file>
+    </qresource>
+</RCC>

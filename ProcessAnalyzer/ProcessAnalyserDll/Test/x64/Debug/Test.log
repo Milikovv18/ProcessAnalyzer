@@ -1,0 +1,5 @@
+﻿  Test.cpp
+Hooker.obj : warning LNK4075: не учитывается "/EDITANDCONTINUE" из-за спецификации "/INCREMENTAL:NO"
+     Создается библиотека C:\Users\Crunchy\source\repos\ProcessAnalyserDll\x64\Debug\Test.lib и объект C:\Users\Crunchy\source\repos\ProcessAnalyserDll\x64\Debug\Test.exp
+LINK : warning LNK4098: библиотека по умолчанию "LIBCMT" конфликтует с использованием других библиотек; используйте /NODEFAULTLIB:library
+  Test.vcxproj -> C:\Users\Crunchy\source\repos\ProcessAnalyserDll\x64\Debug\Test.dll

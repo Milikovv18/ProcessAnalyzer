@@ -1,0 +1,9 @@
+﻿  Hooker.cpp
+  Test.cpp
+     Создается библиотека C:\Users\Crunchy\source\repos\ProcessAnalyserDll\x64\Release\Test.lib и объект C:\Users\Crunchy\source\repos\ProcessAnalyserDll\x64\Release\Test.exp
+  Previous IPDB was built with incompatible compiler, fall back to full compilation.
+LINK : warning LNK4098: библиотека по умолчанию "LIBCMT" конфликтует с использованием других библиотек; используйте /NODEFAULTLIB:library
+  Создание кода
+  All 3 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Создание кода завершено
+  Test.vcxproj -> C:\Users\Crunchy\source\repos\ProcessAnalyserDll\x64\Release\Test.dll

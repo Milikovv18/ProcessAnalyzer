@@ -1,0 +1,9 @@
+﻿  dllmain.cpp
+  Hooker.cpp
+  Network.cpp
+  RuntimeDeps.cpp
+RuntimeDeps.obj : error LNK2001: неразрешенный внешний символ __imp_ImageRvaToVa.
+RuntimeDeps.obj : error LNK2001: неразрешенный внешний символ __imp_ImageDirectoryEntryToData.
+RuntimeDeps.obj : error LNK2001: неразрешенный внешний символ __imp_UnMapAndLoad.
+RuntimeDeps.obj : error LNK2001: неразрешенный внешний символ __imp_MapAndLoad.
+D:\Source\Qt\build-ProcessAnalyser-Desktop_Qt_6_1_3_MSVC2019_64bit-Release\ProcessAnalyserDll.dll : fatal error LNK1120: неразрешенных внешних элементов: 4

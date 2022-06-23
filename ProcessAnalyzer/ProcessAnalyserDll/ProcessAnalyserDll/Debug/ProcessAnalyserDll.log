@@ -1,0 +1,18 @@
+﻿  dllmain.cpp
+C:\Users\Crunchy\source\repos\ProcessAnalyserDll\ProcessAnalyserDll\dllmain.cpp(69,34): warning C4018: <: несоответствие типов со знаком и без знака
+  Hooker.cpp
+C:\Users\Crunchy\source\repos\ProcessAnalyserDll\ProcessAnalyserDll\Hooker.cpp(62,27): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\Crunchy\source\repos\ProcessAnalyserDll\ProcessAnalyserDll\Hooker.cpp(73,32): warning C4244: инициализация: преобразование "uint64_t" в "unsigned int", возможна потеря данных
+C:\Users\Crunchy\source\repos\ProcessAnalyserDll\ProcessAnalyserDll\Hooker.cpp(74,35): warning C4244: аргумент: преобразование "uint64_t" в "size_t", возможна потеря данных
+C:\Users\Crunchy\source\repos\ProcessAnalyserDll\ProcessAnalyserDll\Hooker.cpp(162,59): warning C4244: аргумент: преобразование "const uint64_t" в "SIZE_T", возможна потеря данных
+C:\Users\Crunchy\source\repos\ProcessAnalyserDll\ProcessAnalyserDll\Hooker.cpp(170,58): warning C4244: аргумент: преобразование "const uint64_t" в "SIZE_T", возможна потеря данных
+C:\Users\Crunchy\source\repos\ProcessAnalyserDll\ProcessAnalyserDll\Hooker.cpp(325,40): warning C4244: аргумент: преобразование "uint64_t" в "size_t", возможна потеря данных
+  Network.cpp
+  RuntimeDeps.cpp
+  Создание кода...
+Hooker.obj : error LNK2019: ссылка на неразрешенный внешний символ _cs_open в функции "private: struct Instructs __thiscall Hooker::stealBytes(void const *)" (?stealBytes@Hooker@@AAE?AUInstructs@@PBX@Z).
+Hooker.obj : error LNK2019: ссылка на неразрешенный внешний символ _cs_close в функции "private: struct Instructs __thiscall Hooker::stealBytes(void const *)" (?stealBytes@Hooker@@AAE?AUInstructs@@PBX@Z).
+Hooker.obj : error LNK2019: ссылка на неразрешенный внешний символ _cs_option в функции "private: struct Instructs __thiscall Hooker::stealBytes(void const *)" (?stealBytes@Hooker@@AAE?AUInstructs@@PBX@Z).
+Hooker.obj : error LNK2019: ссылка на неразрешенный внешний символ _cs_disasm в функции "private: struct Instructs __thiscall Hooker::stealBytes(void const *)" (?stealBytes@Hooker@@AAE?AUInstructs@@PBX@Z).
+Capstone\capstone.lib : warning LNK4272: тип компьютера библиотеки "x64" конфликтует с типом целевого компьютера "x86"
+C:\Users\Crunchy\source\repos\ProcessAnalyserDll\Debug\ProcessAnalyserDll.dll : fatal error LNK1120: неразрешенных внешних элементов: 4

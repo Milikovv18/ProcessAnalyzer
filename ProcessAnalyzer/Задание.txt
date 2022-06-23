@@ -1,0 +1,31 @@
+(+) Add HOOKING flag
+(+) Send and recv to/in injected program
+(+) Answer with success flag (from dllmain to server)
+(+) Before hooking, print target function content that will be overwritten
+
+(+) Hooked stats (mark as hooked in GUI)
+	info needed:
+	[1] - name of the target function
+	[2] - name of the target DLL
+
+- Revert hooking
+	info needed:
+	[1] - name of the target function
+	[2] - name of the target DLL
+	[3] - reserved bytes of the target function
+
+- Remove loaded dll from target (to not restart the QT prog)
+	info needed:
+	[4] - name of the DLL to remove
+	[5] - name of its payloads used in hooking
+
+// const char* <-> QString() ?
+
+struct hookedFunc{
+	const char* paylDll_name;
+	const char* paylFunc_name;
+
+	const char* rsrvBytes;
+}
+
+HashTable<const char* (dllName.str() + '\sep' + funcName.str())> hkFuncs;
