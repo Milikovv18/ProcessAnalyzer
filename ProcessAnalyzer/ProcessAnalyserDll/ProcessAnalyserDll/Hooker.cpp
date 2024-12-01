@@ -14,7 +14,7 @@ uint32_t Hooker::buildTrampoline(void* startAddr, const void* FUNC2HOOK)
         cs_insn& inst = stolenInstrs.instructions[i];
         if (inst.id >= X86_INS_LOOP && inst.id <= X86_INS_LOOPNE)
         {
-            throw "Fuck loops";
+            throw "Bad instruction";
         }
 
         if (isRIPRelativeInstr(inst))
@@ -351,7 +351,7 @@ void Hooker::installHook(void* func2hook, void* payloadFunc, void** trampolinePt
 
     void* hookMemory = allocatePageNearAddress(func2hook);
     if (!hookMemory)
-        throw "Fuck your near memory";
+        throw "Unable to allocate memory";
 
     uint32_t trampolineSize = buildTrampoline(hookMemory, func2hook);
     *trampolinePtr = hookMemory;

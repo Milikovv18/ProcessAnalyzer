@@ -44,13 +44,13 @@ DWORD WINAPI routine(void* param)
 
 	auto lib = LoadLibrary(L"Kernel32.dll");
 	if (!lib) {
-		OutputDebugString(L"Fuck lib\n");
+		OutputDebugString(L"Unable to load Kernel32.dll\n");
 		return -1;
 	}
 
 	void* func = GetProcAddress(lib, "GetTickCount");
 	if (!func) {
-		OutputDebugString(L"Fuck func\n");
+		OutputDebugString(L"Unable to find GetTickCount\n");
 		return -2;
 	}
 

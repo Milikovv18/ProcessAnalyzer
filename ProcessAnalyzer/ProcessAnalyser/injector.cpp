@@ -20,12 +20,12 @@ void Injector::apply(int procId, const char* dllName)
     {
         HMODULE hMod = GetModuleHandleA("kernel32.dll");
         if (!hMod) {
-            throw "Wtf happened here";
+            throw "What happened here";
         }
 
         LPVOID LoadLibAddr = (LPVOID)GetProcAddress(hMod, "LoadLibraryA");
         if (!LoadLibAddr) {
-            throw "Wtf happened here";
+            throw "What happened here";
         }
 
         LPVOID dereercomp = VirtualAllocEx(h, NULL, strlen(dllName), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);

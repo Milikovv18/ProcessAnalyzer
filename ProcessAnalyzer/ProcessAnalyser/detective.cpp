@@ -23,7 +23,7 @@ QList<ProcInfo> Detective::getRunningProcesses()
     // Take a snapshot of all processes in the system.
     HANDLE hProcessSnap = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, 0 );
     if( hProcessSnap == INVALID_HANDLE_VALUE ) {
-        throw "Fuck your snapshot";
+        throw "Bad your snapshot";
     }
 
     // Set the size of the structure before using it.
@@ -33,7 +33,7 @@ QList<ProcInfo> Detective::getRunningProcesses()
     // Retrieve information about the first process,
     // and exit if unsuccessful
     if(!Process32First(hProcessSnap, &pe32)) {
-        throw "Fuck something";
+        throw "Something bad";
     }
 
     // Now walk the snapshot of processes, and
@@ -66,17 +66,17 @@ QList<ModuleObject> Detective::getStaticImport(QString fileName)
     fileName.toWCharArray((wchar_t*)m_uniBuffer);
     HANDLE handle = CreateFile((wchar_t*)m_uniBuffer, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
     if (!handle) {
-        throw "Fuck your file";
+        throw "Bad create file";
     }
 
     DWORD byteread, size = GetFileSize(handle, NULL);
     PVOID virtualpointer = VirtualAlloc(NULL, size, MEM_COMMIT, PAGE_READWRITE);
     if (!virtualpointer) {
-        throw "Fuck your vp";
+        throw "Bad virtual pointer";
     }
 
     if (!ReadFile(handle, virtualpointer, size, &byteread, NULL)) {
-        throw "Fuck your files";
+        throw "Bad read file";
     }
 
     CloseHandle(handle);
@@ -102,23 +102,23 @@ QList<ModuleObject> Detective::getStaticImport(QString fileName)
             toRet.append(ModuleObject());
             auto& lastLib = toRet.last();
 
-            // Obtenir le nom de chaque dll
+            // Get the name of each dll
             auto name = QString((PCHAR)((DWORD_PTR)virtualpointer +
                                         Rva2Offset(pImportDescriptor->Name,
                                                    pSech,
                                                    ntheaders->FileHeader.NumberOfSections)));
 
-            // Vérifier que cette bibliothèque n'est pas déjà dans la liste
+            // Check that this library is not already in the list
             helpList.append(name);
 
-            // Obtenir le chemin de cette dll
+            // Get the path to this dll
             auto path = getLibPath(name);
             lastLib.setPath(path);
 
-            // Vérifier si la dll est local (ou obtenir le chemin exacte)
+            // Check if the dll is local (or get the exact path)
             if (Helper::getProcessPath((HANDLE)-1).toLower() == path.toLower())
             {
-                // Essayer de clarifier le chemin
+                // Try to clarify the path
                 path = getLibPath(name, true);
                 lastLib.setPath(path);
 
@@ -128,7 +128,7 @@ QList<ModuleObject> Detective::getStaticImport(QString fileName)
                 }
             }
 
-            // Vérifier si la dll est virtuel
+            // Check if the dll is virtual
             if (lastLib.getName().toLower() != name.toLower())
             {
                 lastLib.setName(name);
@@ -197,28 +197,27 @@ QList<ModuleObject> Detective::getRuntimeDeps(int procId)
 {
     HANDLE handl = OpenProcess(PROCESS_ALL_ACCESS, TRUE, procId);
     if (!handl) {
-        throw "Fuck your access level";
+        throw "Bad access level";
     }
 
     unsigned long actually(0);
     HMODULE mods[256]{};
     if (!EnumProcessModules(handl, mods, 256, &actually)) {
-        throw "Fuck your modules";
+        throw "Bad modules";
     }
 
 
-    // Obtenir le chemin actuel (pour la vitesse)
+    // Get current path (for speed)
     auto procPath = Helper::getProcessPath(handl);
     auto procPathArr = new wchar_t[256]{};
     procPath.toWCharArray(procPathArr);
 
-    // Obtenir les chemins des processus
+    // Get process paths
     clear_buf;
     QList<ModuleObject> toRet;
     for (unsigned int i(0); i < actually; ++i)
     {
-        // Si le chemin de module est le chemin de processus actuel
-        // (le chemin n'a pas trouvé)
+        // If the module path is the current process path (path not found)
         GetModuleFileNameEx(handl, mods[i], (wchar_t*)m_uniBuffer, 256);
         if (_wcsicmp(procPathArr, (wchar_t*)m_uniBuffer) == 0)
             continue;
@@ -252,7 +251,7 @@ QString Detective::getLibPathRough(QString libName)
     std::string winDllName = libName.toStdString();
     if (!GetModuleFileNameA(GetModuleHandleA(winDllName.c_str()), m_uniBuffer, 256))
     {
-        throw "Fuck your lib";
+        throw "Bad lib";
     }
 
     return QString::fromLocal8Bit(m_uniBuffer);
@@ -265,23 +264,23 @@ QString Detective::getLibPathExact(QString libName)
 
     HANDLE lib = LoadLibraryA(tempLibName.c_str());
     if (!lib) {
-        // Si la bibliothèque n'est pas système
+        // If the library is not system
         return "";
     }
 
     HMODULE mod = GetModuleHandleA(tempLibName.c_str());
     if (!mod) {
-        throw "Fuck your module";
+        throw "Bad module";
     }
 
     clear_buf;
     if (!GetModuleFileNameExA(GetCurrentProcess(), mod, m_uniBuffer, 256)) {
-        throw "Fuck everything";
+        throw "Bad filename";
     }
     toRet = QString::fromLocal8Bit(m_uniBuffer);
 
     if (!FreeLibrary(mod)) {
-        throw "Fuck your module";
+        throw "Unable to free library";
     }
 
     return toRet;

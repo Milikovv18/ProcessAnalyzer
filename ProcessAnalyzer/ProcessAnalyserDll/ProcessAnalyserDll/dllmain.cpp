@@ -26,11 +26,11 @@ void splitString(const std::string &strlnk, std::vector<std::string> &result, co
 
 DWORD WINAPI routine(_In_ LPVOID lpParameter)
 {
-    // Démarrer le client
+    // Start client
     Network ntw;
     auto netBuff = new char[ntw.getBufLen()]{};
 
-    // Se connecter au serveur
+    // Connect to the server
     while (ntw.connect() != 0) {
         OutputDebugString(L"Trying to connect");
         Sleep(300);
@@ -38,7 +38,7 @@ DWORD WINAPI routine(_In_ LPVOID lpParameter)
 
     OutputDebugString(L"Connected");
 
-    // Envoyer le code d'accès
+    // Send access code
     int iResult = ntw.sendToHost("010101");
     if (iResult <= 0) {
         OutputDebugString(L"Sending error");

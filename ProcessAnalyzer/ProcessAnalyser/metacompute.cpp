@@ -62,22 +62,22 @@ void MetaCompute::run()
 }
 
 void MetaCompute::connectNetwork(int id){
-    // Fermer la dernière connexion
+    // Close last connection
     if (id != Network::getProcId()) {
         if (Network::isStarted()) {
             Network::close();
         }
 
-        // Injecter le dll dans le processus
+        // Inject the dll into the process
         Injector::apply(id, "D:\\Source\\Qt\\build-ProcessAnalyser-Desktop_Qt_6_1_3_MSVC2019_64bit-Debug\\debug\\injection\\ProcessAnalyserDll.dll");
 
-        // Démarrier le serveu
+        // Start the waiter
         emit log("");
         emit log("Starting local tcp server for communication with dll.");
         Network::startServer();
         emit log("Server started on port " + Network::getPort() + ".");
 
-        // Installer de connexion avec dll injecté
+        // Install connection with injected dll
         Network::accept(id);
     }
 }
@@ -85,7 +85,7 @@ void MetaCompute::connectNetwork(int id){
 
 QList<QTreeWidgetItem*> MetaCompute::getPreviewTreeItems(Detective& detective, QString path)
 {
-    // Trouver tout les importations
+    // Find all imports
     QList<ModuleObject> libs = detective.getStaticImport(path);
 
     int funcTotalCount(0);
@@ -93,13 +93,13 @@ QList<QTreeWidgetItem*> MetaCompute::getPreviewTreeItems(Detective& detective, Q
 
     for (int i(0); i < libs.size(); ++i)
     {
-        // Créer une ligne pour l'arborescence dll
+        // Create a line for the dll tree
         auto item = new QTreeWidgetItem;
         item->setData(0, Qt::DisplayRole, QVariant::fromValue(libs[i].getName()));
         item->setData(1, Qt::DisplayRole, QVariant::fromValue(libs[i].getPath()));
-        item->setData(2, Qt::DisplayRole, QVariant::fromValue(QString("Bibliothèque")));
+        item->setData(2, Qt::DisplayRole, QVariant::fromValue(QString("Library")));
 
-        // Définir l'icône
+        // Set icon
         QIcon rowIcon;
         if (libs[i].isLocal()) {
             rowIcon.addFile(":/Libs/Resources/Lib_NotFound.png");
@@ -110,14 +110,13 @@ QList<QTreeWidgetItem*> MetaCompute::getPreviewTreeItems(Detective& detective, Q
         }
         item->setIcon(0, rowIcon);
 
-        // Arrêter si la dll est virtuel,
-        // car il contient les fonctions de se mise en oeuvre réelle
+        // Stop if the dll is virtual, as it does not contain functions.
         if (libs[i].isVirtual()) {
             items << item;
             continue;
         }
 
-        // TABLEAUX D'EXPORTATION //
+        // EXPORT TABLES //
         QStringList funcs = detective.getStaticExport(libs[i]);
         if (!libs[i].isLocal() && !libs[i].exports()) {
             item->setIcon(0, QIcon(":/Libs/Resources/Lib_NoExport.png"));
@@ -128,7 +127,7 @@ QList<QTreeWidgetItem*> MetaCompute::getPreviewTreeItems(Detective& detective, Q
         {
             auto subItem = new QTreeWidgetItem;
             subItem->setData(0, Qt::DisplayRole, QVariant::fromValue(funcs[j]));
-            subItem->setData(2, Qt::DisplayRole, QVariant::fromValue(QString("Fonction")));
+            subItem->setData(2, Qt::DisplayRole, QVariant::fromValue(QString("Function")));
 
             subItems << subItem;
         }
@@ -147,7 +146,7 @@ QList<QTreeWidgetItem*> MetaCompute::getConnectTreeItems(int id, QList<QString>&
 {
     connectNetwork(id);
 
-    // Demande le liste des dépendances
+    // Request list of dependencies
     int counter(0);
     QString gotData;
     QTreeWidgetItem* item = nullptr;
@@ -157,9 +156,9 @@ QList<QTreeWidgetItem*> MetaCompute::getConnectTreeItems(int id, QList<QString>&
 
     // Get number of deps
     if (Network::recvData(gotData) <= 0)
-        throw "Fuck your connection x2";
+        throw "Unable to receive from network";
     if (gotData[0] != QChar(Network::NUMBER))
-        throw "Fuck your algo";
+        throw "Bad algorithm";
     gotData.remove(0, 1);
     emit progressMaxUpdated(gotData.toInt());
 
@@ -172,7 +171,7 @@ QList<QTreeWidgetItem*> MetaCompute::getConnectTreeItems(int id, QList<QString>&
         if (gotData[0] == QChar(Network::SUCC_FINISHED))
             break;
 
-        // Si nous reçu le nom de la bibliothèque
+        // If we receive the name of the library
         if (gotData[0].toLatin1() == Network::LIBRARY)
         {
             if (item) {
@@ -186,12 +185,12 @@ QList<QTreeWidgetItem*> MetaCompute::getConnectTreeItems(int id, QList<QString>&
             auto parts = gotData.split("\1");
             QString gotName = Helper::getNameFromPath(parts[0]);
 
-            // Créer une ligne pour l'arborescence dll
+            // Create a line for the dll tree
             item->setData(0, Qt::DisplayRole, QVariant::fromValue(gotName));
             item->setData(1, Qt::DisplayRole, QVariant::fromValue(parts[0]));
-            item->setData(2, Qt::DisplayRole, QVariant::fromValue(QString("Bibliothèque")));
+            item->setData(2, Qt::DisplayRole, QVariant::fromValue(QString("Library")));
 
-            // Définir l'icône
+            // Set icon
             QIcon rowIcon;
             if (parts[1].toUInt() & 1) { // Is local
                 rowIcon.addFile(":/Libs/Resources/Lib_NotFound.png");
@@ -202,7 +201,7 @@ QList<QTreeWidgetItem*> MetaCompute::getConnectTreeItems(int id, QList<QString>&
             }
             item->setIcon(0, rowIcon);
         }
-        // Si nous reçu le nom de la fonction
+        // If we receive the function name
         else if (gotData[0].toLatin1() == Network::FUNCTION)
         {
             gotData.remove(0, 1);
@@ -216,7 +215,7 @@ QList<QTreeWidgetItem*> MetaCompute::getConnectTreeItems(int id, QList<QString>&
                 }
                 subItem->setData(0, Qt::DisplayRole, QVariant::fromValue(parts[i + 0]));
                 subItem->setData(1, Qt::DisplayRole, QVariant::fromValue("0x" + parts[i + 1]));
-                subItem->setData(2, Qt::DisplayRole, QVariant::fromValue(QString("Fonction")));
+                subItem->setData(2, Qt::DisplayRole, QVariant::fromValue(QString("Function")));
 
                 subItems << subItem;
             }
@@ -225,7 +224,7 @@ QList<QTreeWidgetItem*> MetaCompute::getConnectTreeItems(int id, QList<QString>&
         Network::sendData(&next);
     }
 
-    // Dernier addition
+    // Last addition
     if (item) {
         item->addChildren(subItems);
         items << item;

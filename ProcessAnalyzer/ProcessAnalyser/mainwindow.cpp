@@ -77,7 +77,7 @@ void MainWindow::actionHook(){
     log("");
     log("Getting user dll path.");
 
-    // Obtenir le chemin de dll utilisateur
+    // Get user dll path
     auto dllPath = QFileDialog::
             getOpenFileName(this,
                             "Choose library (dll) with payload",
@@ -98,7 +98,7 @@ void MainWindow::actionHook(){
         return;
     }
 
-    // Crérr un tableau
+    // Create a table
     auto funcWnd = new QDialog;
     auto layout = new QHBoxLayout;
     auto funcContainer = new QTableWidget(funcs.size(), 1);
@@ -133,7 +133,7 @@ void MainWindow::actionHook(){
     log("Dll loaded.");
 
 
-    // Préparer les données d'injection �  envoyer
+    // Prepare injection data to be sent
     QString injectionData;
 
     QString funcToHook_name(m_curItem->parent()->text(1) + '\2' + m_curItem->text(0));
@@ -471,7 +471,7 @@ void MainWindow::functionReady(ActionType type, void* args)
 
     case ActionType::INVALID:
     {
-        throw "Fuck your action";
+        throw "Invalid action";
     } break;
     }
 }
@@ -489,10 +489,10 @@ ProcInfo MainWindow::parseProcInfo(QString info) const
     QString procPath;
 
     if (info.isEmpty()) {
-        throw "Fuck your info";
+        throw "Empty info";
     }
 
-    // Obtenir un id de processus
+    // Get a process id
     bool ok;
     int procId = info.toUInt(&ok);
     if (ok) {

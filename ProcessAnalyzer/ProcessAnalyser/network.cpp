@@ -79,7 +79,7 @@ void Network::accept(int procId)
         throw "Accept failed";
     }
 
-    // Vérifier le code
+    // Check code
     char passcode[7]{};
     ::recv(m_client, passcode, 7, 0);
 
